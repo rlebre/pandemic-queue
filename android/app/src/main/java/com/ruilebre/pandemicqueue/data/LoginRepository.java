@@ -1,6 +1,6 @@
 package com.ruilebre.pandemicqueue.data;
 
-import com.ruilebre.pandemicqueue.data.model.LoggedInUser;
+import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
 
 /**
  * Class that requests authentication and user information from the remote data source and

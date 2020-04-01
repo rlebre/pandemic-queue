@@ -1,6 +1,6 @@
 package com.ruilebre.pandemicqueue.data;
 
-import com.ruilebre.pandemicqueue.data.model.LoggedInUser;
+import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
 
 import java.io.IOException;
 
