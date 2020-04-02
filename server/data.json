@@ -1,0 +1,43 @@
+{
+    "stores": [
+        {
+            "name": "Pingo Doce Aveiro",
+            "city": "Aveiro",
+            "address": "Rua Lourenco Peixinho",
+            "nWaiting": 5,
+            "lastOnQueue": "2010-01-01T00:00:00.000Z",
+            "lastEnteredStore": "2010-01-01T00:00:00.000Z",
+            "capacity": 10
+        },
+        {
+            "name": "Continente Aveiro",
+            "city": "Aveiro",
+            "address": "Rua Mario Sacramento",
+            "nWaiting": 1,
+            "lastOnQueue": "2010-01-01T00:00:00.000Z",
+            "lastEnteredStore": "2010-01-01T00:00:00.000Z",
+            "capacity": 30
+        },
+        {
+            "name": "Spar",
+            "city": "Aveiro",
+            "address": "Rua Artur Ravara",
+            "nWaiting": 2,
+            "lastOnQueue": "2010-01-01T00:00:00.000Z",
+            "lastEnteredStore": "2010-01-01T00:00:00.000Z",
+            "capacity": 10
+        }
+    ],
+    "users": [
+        {
+            "username": "test1",
+            "email": "testuser1@test.com",
+            "password": "test"
+        },
+        {
+            "username": "test2",
+            "email": "testuser2@test.com",
+            "password": "test"
+        }
+    ]
+}
