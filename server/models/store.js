@@ -28,7 +28,7 @@ const storeSchema = new Schema({
     lastOnQueue: { type: Date },
     lastEnteredStore: { type: Date },
     capacity: { type: Number },
-    waitingTickets: [{ type: Schema.Types.ObjectId, ref: 'Tickets' }]
+    waitingTickets: [{ type: Schema.Types.ObjectId, ref: 'Ticket' }]
 });
 
 
