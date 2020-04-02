@@ -42,29 +42,34 @@ exports.createStore = function (req, res) {
 }
 
 exports.getStoreWaitingTickets = function (req, res) {
-    const store = res.locals.store;
+    const name = req.query.store;
 
-    Store.where({ store })
+    Store.where({ name })
         .populate('waitingTickets')
-        .exec(function (err, foundTickets) {
+        .exec(function (err, foundStore) {
             if (err) {
                 return res.status(422).send({ errors: normalizeErrors(err.errors) });
             }
 
-            return res.json(foundTickets);
+            return res.json(foundStore.waitingTickets ? foundStore.waitingTickets : []);
         });
 }
 
 exports.getNumberStoreWaitingTickets = function (req, res) {
-    const store = res.locals.store;
+    const name = req.query.store;
 
-    Store.where({ store })
+    Store.findOne({ name })
         .populate('waitingTickets')
-        .exec(function (err, foundTickets) {
+        .exec(function (err, existingStore) {
             if (err) {
+                console.log(err);
                 return res.status(422).send({ errors: normalizeErrors(err.errors) });
             }
 
-            return res.json({ 'waiting_tickets': foundTickets.length });
+            if (!existingStore) {
+                return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist." }] });
+            }
+
+            return res.json({ 'waiting_tickets': existingStore.waitingTickets.length });
         });
 }
