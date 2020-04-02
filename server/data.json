@@ -7,7 +7,8 @@
             "nWaiting": 5,
             "lastOnQueue": "2010-01-01T00:00:00.000Z",
             "lastEnteredStore": "2010-01-01T00:00:00.000Z",
-            "capacity": 10
+            "capacity": 10,
+            "waitingTickets": []
         },
         {
             "name": "Continente Aveiro",
@@ -16,7 +17,8 @@
             "nWaiting": 1,
             "lastOnQueue": "2010-01-01T00:00:00.000Z",
             "lastEnteredStore": "2010-01-01T00:00:00.000Z",
-            "capacity": 30
+            "capacity": 30,
+            "waitingTickets": []
         },
         {
             "name": "Spar",
@@ -25,7 +27,8 @@
             "nWaiting": 2,
             "lastOnQueue": "2010-01-01T00:00:00.000Z",
             "lastEnteredStore": "2010-01-01T00:00:00.000Z",
-            "capacity": 10
+            "capacity": 10,
+            "waitingTickets": []
         }
     ],
     "users": [
