@@ -25,7 +25,7 @@ exports.createTicket = function (req, res) {
                 return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist!" }] });
             }
 
-            if (existingStore.waitingTickets.find(ticket => ticket.user._id == user._id && ticket.enteredStoreTimestamp == null)) {
+            if (existingStore.waitingTickets.find(ticket => ticket.user._id.equals(user._id) && ticket.enteredStoreTimestamp === null)) {
                 return res.status(422).send({ errors: [{ title: "Invalid new ticket!", detail: "Ticket for this user already taken in this store." }] });
             }
 
@@ -77,7 +77,7 @@ exports.callTicket = function (req, res) {
                 return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist!" }] });
             }
 
-            const ticket = existingStore.waitingTickets.find(ticket => ticket.user._id == user._id && ticket.enteredStoreTimestamp == null);
+            const ticket = existingStore.waitingTickets.find(ticket => ticket.user._id.equals(user._id) && ticket.enteredStoreTimestamp == null);
 
             if (!ticket) {
                 return res.status(422).send({ errors: [{ title: "Invalid ticket!", detail: "Ticket for this user does not exist in this store." }] });
@@ -102,13 +102,4 @@ exports.callTicket = function (req, res) {
                 res.json({ 'status': true, 'ticket': 'removed' });
             });
         });
-}
-
-function ticketExists(userId, ticket) {
-    for (var i = 0; i < myArray.length; i++) {
-        if (myArray[i].name === nameKey) {
-            return myArray[i];
-        }
-    }
-    return ticket.user._id === userId && ticket.enteredStoreTimestamp === null;
 }
