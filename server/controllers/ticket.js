@@ -6,11 +6,12 @@ const { normalizeErrors } = require('../helpers/mongoose');
 const moment = require('moment');
 
 exports.createTicket = function (req, res) {
-    var { store, user } = req.body;
+    var { store } = req.body
+    const user = res.locals.user;
     const enteredQueueTimestamp = moment.now();
 
-    if (!user || !store) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide user and store ." }] });
+    if (!store) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
     }
 
     Store.findById(store._id)
@@ -57,13 +58,13 @@ exports.createTicket = function (req, res) {
 }
 
 exports.callTicket = function (req, res) {
-    const { store, user } = req.body;
+    const { store } = req.body;
+    const user = res.locals.user;
     const enteredStoreTimestamp = moment.now();
 
-    if (!user || !store) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide user and store ." }] });
+    if (!store) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
     }
-
 
     Store.findById(store._id)
         .populate('waitingTickets')
