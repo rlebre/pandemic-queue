@@ -21,8 +21,8 @@ Short list of the web services available
 Open: 
 
 - POST `localhost:3000/api/v1/users/register`
-    ```http
-    Body example:
+    > Body example:
+    ```json
     {
         "username": "test",
         "email": "test@test.com",
@@ -32,8 +32,8 @@ Open:
     ```
 
 - POST `localhost:3000/api/v1/users/auth`
-    ```http
-    Body example:
+    > Body example:
+    ```json
     {
         "email": "test@test.com",
         "password": "1234"
@@ -43,36 +43,105 @@ Open:
 
 Protected:
 
-- `localhost:3000/api/v1/users/get-user-details`
+- GET `localhost:3000/api/v1/users/get-user-details`
+    > Authorization header example:
     ```http
-    Authorization header example:
     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTg3N2Q5MDM0ODk2YzM4MTEwZjRmMzgiLCJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNTg1OTM3ODE1LCJleHAiOjE1ODU5NDE0MTV9.Ua0R3JCuK60kTuK5fpLwbC8nbqebIZtSVsDDlUBzQeU
     ```
+
 #### Ticket
+Protected:
+
+- POST `localhost:3000/api/v1/tickets/ticket`
+
+    > Body example:
+    ```json
+    {
+        "store": {
+            "_id": "5e863df2aa63871c66594ff0"
+        }
+    }
+    ```
+
+    > Authorization header example:
+    ```http
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTg3N2Q5MDM0ODk2YzM4MTEwZjRmMzgiLCJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNTg1OTM3ODE1LCJleHAiOjE1ODU5NDE0MTV9.Ua0R3JCuK60kTuK5fpLwbC8nbqebIZtSVsDDlUBzQeU
+    ```
+
+- POST `localhost:3000/api/v1/tickets/call-ticket`
+
+    > Body example:
+    ```json
+    {
+        "store": {
+            "_id": "5e863df2aa63871c66594ff0"
+        }
+    }
+    ```
+
+    > Authorization header example:
+    ```http
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTg3N2Q5MDM0ODk2YzM4MTEwZjRmMzgiLCJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNTg1OTM3ODE1LCJleHAiOjE1ODU5NDE0MTV9.Ua0R3JCuK60kTuK5fpLwbC8nbqebIZtSVsDDlUBzQeU
+    ```
 
 #### Store
 
+- POST `localhost:3000/api/v1/stores/store`
+
+    > Body example:
+    ```json
+    {
+        "name": "test", 
+        "city": "test",
+        "address": "test", 
+        "capacity": "test"
+    }
+    ```
+
+- GET `localhost:3000/api/v1/stores/number-waiting-tickets?store=example`
+
+    > Query param: store -> name of the store
+
+- POST `localhost:3000/api/v1/stores/waiting-tickets?store=example`
+
+    > Query param: store -> name of the store
+
+- POST `localhost:3000/api/v1/stores/get-store-details?store=example`
+
+    > Query param: store -> name of the store
+
 #### Subscription
 
-Protected:
 
-- `localhost:3000/api/v1/subscriptions/subscribe`
+- POST `localhost:3000/api/v1/subscriptions/subscribe`
 
-    > **Body example:**
-    ```http
+    > Body example:
+    ```json
     {
         "email": "test@test.com",
         "password": "1234"
     }
     ```
 
-    > **Authorization header example:**
+    > Authorization header example:
     ```http
     Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTg3N2Q5MDM0ODk2YzM4MTEwZjRmMzgiLCJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNTg1OTM3ODE1LCJleHAiOjE1ODU5NDE0MTV9.Ua0R3JCuK60kTuK5fpLwbC8nbqebIZtSVsDDlUBzQeU
     ```
 
-    - `localhost:3000/api/v1/subscriptions/unsubscribe`
+- POST `localhost:3000/api/v1/subscriptions/unsubscribe`
 
+    > Body example:
+    ```json
+    {
+        "email": "test@test.com",
+        "password": "1234"
+    }
+    ```
+
+    > Authorization header example:
+    ```http
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZTg3N2Q5MDM0ODk2YzM4MTEwZjRmMzgiLCJ1c2VybmFtZSI6InRlc3QzIiwiaWF0IjoxNTg1OTM3ODE1LCJleHAiOjE1ODU5NDE0MTV9.Ua0R3JCuK60kTuK5fpLwbC8nbqebIZtSVsDDlUBzQeU
+    ```
 
 
 ## Android application
