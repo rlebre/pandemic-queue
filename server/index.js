@@ -6,6 +6,7 @@ const config = require('./config');
 const userRoutes = require('./routes/users');
 const storeRoutes = require('./routes/stores');
 const ticketRoutes = require('./routes/tickets');
+const subscriptionsRoutes = require('./routes/subscriptions');
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,12 +18,10 @@ mongoose.connect(config.DB_URI, { useNewUrlParser: true }).then(() => {
     }
 });
 
-//app.get('/', (req, res) => res.send({ 'resumo': 'Vais-te foder Tiago!' }))
-//app.get('/hello', (req, res) => res.send({ 'resumo': 'Vais-te foder Tiago!' }))
-
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/stores', storeRoutes);
 app.use('/api/v1/tickets', ticketRoutes);
+app.use('/api/v1/subscriptions', subscriptionsRoutes);
 
 
 const PORT = process.env.PORT || 3000;
