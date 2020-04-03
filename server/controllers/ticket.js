@@ -45,12 +45,11 @@ exports.createTicket = function (req, res) {
                 existingStore.lastOnQueue = enteredQueueTimestamp;
                 existingStore.waitingTickets.push(ticket)
                 existingStore.nWaiting = existingStore.waitingTickets.length;
-                console.log(existingStore)
                 existingStore.save(function (err, doc) {
-                    if (err) return console.log({ error: err });
-                    console.log('Succesfully saved.');
+                    if (err) {
+                        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                    }
                 });
-
 
                 res.json({ 'status': true, 'ticket': 'added' });
             });
