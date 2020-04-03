@@ -1,13 +1,12 @@
 const Store = require('../models/store')
 
 const { normalizeErrors } = require('../helpers/mongoose');
-const moment = require('moment');
 
 exports.createStore = function (req, res) {
     const { name, city, address, capacity } = req.body;
 
     if (!name || !city || !address || !capacity) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide email and password." }] });
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide name, city, address and acapacity." }] });
     }
 
     Store.findOne({ name }, function (err, existingStore) {
@@ -71,5 +70,23 @@ exports.getNumberStoreWaitingTickets = function (req, res) {
             }
 
             return res.json({ 'waiting_tickets': existingStore.waitingTickets.length });
+        });
+}
+
+exports.getStoreDetails = function (req, res) {
+    const name = req.query.name;
+
+    Store.findOne({ name })
+        .exec(function (err, existingStore) {
+            if (err) {
+                console.log(err);
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+
+            if (!existingStore) {
+                return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist." }] });
+            }
+
+            return res.json({ 'store': existingStore });
         });
 }
