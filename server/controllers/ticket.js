@@ -64,38 +64,39 @@ exports.callTicket = function (req, res) {
         return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide user and store ." }] });
     }
 
-    Ticket.findOne({ user, store, enteredStoreTimestamp: null })
-        .populate('store')
-        .exec(function (err, existingTicket) {
+
+    Store.findById(store._id)
+        .populate('waitingTickets')
+        .exec((err, existingStore) => {
             if (err) {
                 return res.status(422).send({ errors: normalizeErrors(err.errors) });
             }
 
-            if (!existingTicket) {
+            if (!existingStore) {
+                return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist!" }] });
+            }
+
+            const ticket = existingStore.waitingTickets.find(ticket => ticket.user._id == user._id && ticket.enteredStoreTimestamp == null);
+
+            if (!ticket) {
                 return res.status(422).send({ errors: [{ title: "Invalid ticket!", detail: "Ticket for this user does not exist in this store." }] });
             }
 
-            existingTicket.enteredStoreTimestamp = enteredStoreTimestamp;
+            ticket.enteredStoreTimestamp = enteredStoreTimestamp;
 
-            existingTicket.save(function (err) {
+            ticket.save(function (err) {
                 if (err) {
                     return res.status(422).send({ errors: normalizeErrors(err.errors) });
                 }
 
-                Store.findOneAndUpdate(
-                    { _id: store._id },
-                    {
-                        $inc: { nWaiting: -1 },
-                        $set: {
-                            lastEnteredStore: enteredStoreTimestamp,
-                        },
-                        $pull: {
-                            waitingTickets: existingTicket._id
-                        }
-                    }, function (err, doc) {
-                        if (err) return console.log({ error: err });
-                        return console.log('Succesfully saved.');
-                    });
+                existingStore.lastEnteredStore = enteredStoreTimestamp;
+                existingStore.waitingTickets.pull(ticket)
+                existingStore.nWaiting = existingStore.waitingTickets.length;
+                existingStore.save(function (err, doc) {
+                    if (err) {
+                        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                    }
+                });
 
                 res.json({ 'status': true, 'ticket': 'removed' });
             });
