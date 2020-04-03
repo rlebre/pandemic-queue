@@ -98,3 +98,21 @@ function parseToken(token) {
 function notAuthorized(res) {
     return res.status(401).send({ errors: [{ title: "Not authorized.", detail: "You need to login" }] });
 }
+
+exports.getUserDetails = function (req, res) {
+    const username = req.query.username;
+
+    User.findOne({ username })
+        .exec(function (err, existingUser) {
+            if (err) {
+                console.log(err);
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+
+            if (!existingUser) {
+                return res.status(422).send({ errors: [{ title: "Invalid user!", detail: "User does not exist." }] });
+            }
+
+            return res.json({ 'user': existingUser });
+        });
+}
