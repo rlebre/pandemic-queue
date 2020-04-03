@@ -22,7 +22,7 @@ const userSchema = new Schema({
         min: [4, "Name too long. Max: 4 characters."],
         required: "Password is required"
     },
-    subscriptions: [{ type: Schema.Types.ObjectId, ref: 'Store' }]
+    storeSubscriptions: [{ type: Schema.Types.ObjectId, ref: 'Store' }]
 });
 
 userSchema.methods.hasSamePassword = function (requestedPassword) {

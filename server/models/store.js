@@ -28,7 +28,8 @@ const storeSchema = new Schema({
     lastOnQueue: { type: Date },
     lastEnteredStore: { type: Date },
     capacity: { type: Number },
-    waitingTickets: [{ type: Schema.Types.ObjectId, ref: 'Ticket' }]
+    waitingTickets: [{ type: Schema.Types.ObjectId, ref: 'Ticket' }],
+    usersSubscribed: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 
