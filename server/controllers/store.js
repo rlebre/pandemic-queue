@@ -87,6 +87,6 @@ exports.getStoreDetails = function (req, res) {
                 return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist." }] });
             }
 
-            return res.json({ 'store': existingStore });
+            return res.json(existingStore);
         });
 }
