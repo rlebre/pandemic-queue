@@ -102,11 +102,11 @@ Protected:
 
     > Query param: store -> name of the store
 
-- POST `localhost:3000/api/v1/stores/waiting-tickets?store=example`
+- GET `localhost:3000/api/v1/stores/waiting-tickets?store=example`
 
     > Query param: store -> name of the store
 
-- POST `localhost:3000/api/v1/stores/get-store-details?store=example`
+- GET `localhost:3000/api/v1/stores/get-store-details?store=example`
 
     > Query param: store -> name of the store
 
