@@ -46,6 +46,19 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
+    public void offlineLogin(SessionToken token) {
+        if (token.isValid()) {
+            DecodedJWT decodedJWT = token.decode();
+            Claim userId = decodedJWT.getClaim("userId");
+            Claim username = decodedJWT.getClaim("username");
+            LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
+            loginResult.setValue(new LoginResult(false, data.getDisplayName()));
+        } else {
+            loginResult.setValue(new LoginResult(true, "Token expired."));
+        }
+
+    }
+
     public void login(Endpoint authEndpoint, String email, String password) {
         RequestQueue requestQueue = Volley.newRequestQueue(this.context);
 

@@ -1,6 +1,8 @@
 package com.ruilebre.pandemicqueue.ui.login;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 
 import com.ruilebre.pandemicqueue.R;
+import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
+import com.ruilebre.pandemicqueue.data.models.SessionToken;
 import com.ruilebre.pandemicqueue.utils.Endpoint;
 import com.ruilebre.pandemicqueue.utils.backendendpoints.UserEndpoint;
 
@@ -32,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+
         try {
             this.authEndpoint = new Endpoint("http://192.168.1.93", "3000", Endpoint.DEFAULT_API + UserEndpoint.AUTH);
 
@@ -40,6 +46,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         loginViewModel = new LoginViewModel(this);
+
+
+        String token = this.getSessionKey();
+        if (token != null) {
+            SessionToken sessionToken = new SessionToken();
+            sessionToken.setToken(token);
+            loginViewModel.offlineLogin(sessionToken);
+        }
+
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
@@ -73,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getMessage());
                 }
                 if (loginResult.getError() == false) {
+                    setSessionKey();
                     updateUiWithUser(loginResult.getMessage());
                 }
                 setResult(Activity.RESULT_OK);
@@ -129,5 +145,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(String errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setSessionKey() {
+        SharedPreferences pref = getSharedPreferences("SessionToken", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString("token", LoggedInUser.getInstance().getToken().getToken());
+        edit.commit();
+    }
+
+    private String getSessionKey() {
+        SharedPreferences pref = getSharedPreferences("SessionToken", Context.MODE_PRIVATE);
+        return pref.getString("token", null);
     }
 }
