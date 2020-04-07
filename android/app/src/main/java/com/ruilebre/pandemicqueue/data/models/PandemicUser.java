@@ -39,4 +39,13 @@ public class PandemicUser {
     public void setStoreSubscriptions(List<Store> storeSubscriptions) {
         this.storeSubscriptions = storeSubscriptions;
     }
+
+    @Override
+    public String toString() {
+        return "PandemicUser{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", storeSubscriptions=" + storeSubscriptions +
+                '}';
+    }
 }
