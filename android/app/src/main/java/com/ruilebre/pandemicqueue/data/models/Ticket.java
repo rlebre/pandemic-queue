@@ -40,4 +40,14 @@ public class Ticket {
     public void setStores(List<Store> stores) {
         this.stores = stores;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "enteredQueueTimestamp=" + enteredQueueTimestamp +
+                ", enteredStoreTimestamp=" + enteredStoreTimestamp +
+                ", users=" + users +
+                ", stores=" + stores +
+                '}';
+    }
 }
