@@ -29,7 +29,7 @@ public class SessionToken {
         Date currentDate = new Date();
         Date expirationDate = decode().getExpiresAt();
 
-        return expirationDate.before(currentDate);
+        return expirationDate.after(currentDate);
     }
 
     public boolean isAuthenticated() {
