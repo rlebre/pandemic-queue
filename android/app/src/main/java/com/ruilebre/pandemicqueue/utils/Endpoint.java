@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Endpoint {
+    public static final String DEFAULT_API = "/api/v1";
+
     private String host;
     private int port;
     private String basepath;
