@@ -14,6 +14,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.NormalizedError;
@@ -59,11 +61,12 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onResponse(Object res) {
                 JSONObject response = (JSONObject) res;
-                Log.i("VOLLEY", response.toString());
                 SessionToken token = new Gson().fromJson(response.toString(), SessionToken.class);
-
-                LoggedInUser data = new LoggedInUser("", "");
-                loginResult.setValue(new LoginResult(true));
+                DecodedJWT decodedJWT = token.decode();
+                Claim userId = decodedJWT.getClaim("userId");
+                Claim username = decodedJWT.getClaim("username");
+                LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
+                loginResult.setValue(new LoginResult(false, data.getDisplayName()));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -75,12 +78,11 @@ public class LoginViewModel extends ViewModel {
 
                     NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
 
-                    System.out.println(normalizedError);
+                    loginResult.setValue(new LoginResult(true, normalizedError.getTitle()));
                 } catch (UnsupportedEncodingException | JSONException e) {
                     e.printStackTrace();
                 }
 
-                loginResult.setValue(new LoginResult(R.string.login_failed));
             }
         });
 

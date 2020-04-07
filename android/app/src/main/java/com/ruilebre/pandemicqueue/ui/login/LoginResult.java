@@ -7,25 +7,22 @@ import androidx.annotation.Nullable;
  */
 class LoginResult {
     @Nullable
-    private boolean success;
+    private String message;
     @Nullable
-    private Integer error;
+    private Boolean error;
 
-    LoginResult(@Nullable Integer error) {
+    LoginResult(@Nullable Boolean error, @Nullable String message) {
         this.error = error;
-    }
-
-    LoginResult(@Nullable boolean success) {
-        this.success = success;
+        this.message = message;
     }
 
     @Nullable
-    boolean getSuccess() {
-        return success;
+    String getMessage() {
+        return message;
     }
 
     @Nullable
-    Integer getError() {
+    Boolean getError() {
         return error;
     }
 }
