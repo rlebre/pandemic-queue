@@ -1,7 +1,7 @@
 package com.ruilebre.pandemicqueue.services;
 
 import com.ruilebre.pandemicqueue.data.models.Store;
-import com.ruilebre.pandemicqueue.utils.backendendpoints.SubscriptionEndpoint;
+import com.ruilebre.pandemicqueue.utils.endpoints.SubscriptionEndpoint;
 
 import java.util.HashMap;
 

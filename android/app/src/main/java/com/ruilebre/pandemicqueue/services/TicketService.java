@@ -2,7 +2,7 @@ package com.ruilebre.pandemicqueue.services;
 
 import com.ruilebre.pandemicqueue.data.Status;
 import com.ruilebre.pandemicqueue.data.models.Store;
-import com.ruilebre.pandemicqueue.utils.backendendpoints.TicketEndpoint;
+import com.ruilebre.pandemicqueue.utils.endpoints.TicketEndpoint;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

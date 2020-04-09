@@ -1,4 +1,9 @@
-package com.ruilebre.pandemicqueue.services;
+package com.ruilebre.pandemicqueue.utils;
+
+import com.ruilebre.pandemicqueue.services.StoreService;
+import com.ruilebre.pandemicqueue.services.SubscriptionService;
+import com.ruilebre.pandemicqueue.services.TicketService;
+import com.ruilebre.pandemicqueue.services.UserService;
 
 public class ApiUtils {
 

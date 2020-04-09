@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
 import com.ruilebre.pandemicqueue.data.models.SessionToken;
-import com.ruilebre.pandemicqueue.services.ApiUtils;
+import com.ruilebre.pandemicqueue.utils.ApiUtils;
 import com.ruilebre.pandemicqueue.services.UserService;
 
 public class LoginActivity extends AppCompatActivity {

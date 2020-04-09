@@ -2,7 +2,7 @@ package com.ruilebre.pandemicqueue.services;
 
 import com.ruilebre.pandemicqueue.data.models.PandemicUser;
 import com.ruilebre.pandemicqueue.data.models.SessionToken;
-import com.ruilebre.pandemicqueue.utils.backendendpoints.UserEndpoint;
+import com.ruilebre.pandemicqueue.utils.endpoints.UserEndpoint;
 
 import java.util.HashMap;
 
