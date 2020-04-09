@@ -1,19 +1,11 @@
 package com.ruilebre.pandemicqueue.ui.login;
 
-import android.content.Context;
-import android.util.Log;
 import android.util.Patterns;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
@@ -21,21 +13,26 @@ import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.NormalizedError;
 import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
 import com.ruilebre.pandemicqueue.data.models.SessionToken;
-import com.ruilebre.pandemicqueue.utils.Endpoint;
+import com.ruilebre.pandemicqueue.services.UserService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+
 
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    private Context context;
+    private UserService userService;
 
-    LoginViewModel(Context context) {
-        this.context = context;
+    LoginViewModel(UserService userService) {
+        this.userService = userService;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -59,47 +56,40 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void login(Endpoint authEndpoint, String email, String password) {
-        RequestQueue requestQueue = Volley.newRequestQueue(this.context);
-
-        JSONObject jsonBody = new JSONObject();
-        try {
-            jsonBody.put("email", email);
-            jsonBody.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, authEndpoint.toString(), jsonBody, new Response.Listener() {
+    public void login(String email, String password) {
+        HashMap<String, String> loginuser = new HashMap<>();
+        loginuser.put("email", email);
+        loginuser.put("password", password);
+        Call call = userService.login(loginuser);
+        call.enqueue(new Callback() {
             @Override
-            public void onResponse(Object res) {
-                JSONObject response = (JSONObject) res;
-                SessionToken token = new Gson().fromJson(response.toString(), SessionToken.class);
-                DecodedJWT decodedJWT = token.decode();
-                Claim userId = decodedJWT.getClaim("userId");
-                Claim username = decodedJWT.getClaim("username");
-                LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
-                loginResult.setValue(new LoginResult(false, data.getDisplayName()));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("VOLLEY", error.toString());
-                try {
-                    JSONObject jsonError = new JSONObject(new String(error.networkResponse.data, "UTF-8"));
-                    jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
+            public void onResponse(Call call, retrofit2.Response response) {
+                if (response.isSuccessful()) {
+                    SessionToken token = (SessionToken) response.body();
 
-                    NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
-
-                    loginResult.setValue(new LoginResult(true, normalizedError.getTitle()));
-                } catch (UnsupportedEncodingException | JSONException e) {
-                    e.printStackTrace();
+                    DecodedJWT decodedJWT = token.decode();
+                    Claim userId = decodedJWT.getClaim("userId");
+                    Claim username = decodedJWT.getClaim("username");
+                    LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
+                    loginResult.setValue(new LoginResult(false, data.getDisplayName()));
+                } else {
+                    try {
+                        JSONObject jsonError = new JSONObject(response.errorBody().string());
+                        jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
+                        NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
+                        loginResult.setValue(new LoginResult(true, normalizedError.getTitle()));
+                    } catch (JSONException | IOException e) {
+                        e.printStackTrace();
+                        loginResult.setValue(new LoginResult(true, "Unknown error"));
+                    }
                 }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
 
             }
         });
-
-        requestQueue.add(jsonObjectRequest);
     }
 
 
