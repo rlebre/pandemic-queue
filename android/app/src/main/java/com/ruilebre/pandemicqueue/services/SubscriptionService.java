@@ -7,12 +7,13 @@ import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface SubscriptionService {
     @POST(SubscriptionEndpoint.SUBSCRIBE)
-    Call<HashMap<String, String>> subscribe(@Body Store body);
+    Call<HashMap<String, String>> subscribe(@Header("Authorization") String authorization, @Body Store body);
 
     @POST(SubscriptionEndpoint.UNSUBSCRIBE)
-    Call<HashMap<String, String>> unsubscribe(@Body Store store);
+    Call<HashMap<String, String>> unsubscribe(@Header("Authorization") String authorization, @Body Store store);
 }

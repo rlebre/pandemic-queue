@@ -6,12 +6,13 @@ import com.ruilebre.pandemicqueue.utils.endpoints.TicketEndpoint;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface TicketService {
     @POST(TicketEndpoint.CALL_TICKET)
-    Call<Status> callTicket(@Body Store body);
+    Call<Status> callTicket(@Header("Authorization") String authorization, @Body Store body);
 
     @POST(TicketEndpoint.CREATE_TICKET)
-    Call<Status> createTicket(@Body Store store);
+    Call<Status> createTicket(@Header("Authorization") String authorization, @Body Store store);
 }

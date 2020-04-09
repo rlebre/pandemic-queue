@@ -9,6 +9,7 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -20,5 +21,5 @@ public interface UserService {
     Call register(@Body SessionToken body);
 
     @GET(UserEndpoint.GET_USER_DETAILS)
-    Call<PandemicUser> getUserDetails(@Query("store") String store);
+    Call<PandemicUser> getUserDetails(@Header("Authorization") String authorization, @Query("store") String store);
 }
