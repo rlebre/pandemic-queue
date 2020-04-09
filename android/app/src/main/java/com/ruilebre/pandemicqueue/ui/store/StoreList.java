@@ -1,4 +1,4 @@
-package com.ruilebre.pandemicqueue.ui.fragments;
+package com.ruilebre.pandemicqueue.ui.store;
 
 import android.os.Bundle;
 
