@@ -1,13 +1,17 @@
 package com.ruilebre.pandemicqueue.data.models;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.android.jwt.JWT;
 
 import java.util.Date;
 
 public class SessionToken {
     private String token;
+    private JWT jwtToken;
+
+    public SessionToken(String token) {
+        this.token = token;
+        this.jwtToken = new JWT(token);
+    }
 
     public String getToken() {
         return token;
@@ -15,19 +19,16 @@ public class SessionToken {
 
     public void setToken(String token) {
         this.token = token;
+        this.jwtToken = new JWT(token);
     }
 
-    public DecodedJWT decode() {
-        try {
-            return JWT.decode(token);
-        } catch (JWTDecodeException exception) {
-            return null;
-        }
+    public JWT getJwtToken() {
+        return jwtToken;
     }
 
     public boolean isValid() {
         Date currentDate = new Date();
-        Date expirationDate = decode().getExpiresAt();
+        Date expirationDate = jwtToken.getExpiresAt();
 
         return expirationDate.after(currentDate);
     }
