@@ -22,11 +22,11 @@ import com.ruilebre.pandemicqueue.utils.TextAdjust;
 
 import java.util.List;
 
-public class StoreList extends Fragment {
+public class StoreListFragment extends Fragment {
     private StoreService storeService;
     private StoreListViewModel storeListViewModel;
 
-    public StoreList() {
+    public StoreListFragment() {
         // Required empty public constructor
     }
 
@@ -73,6 +73,7 @@ public class StoreList extends Fragment {
         private CardView storeCardView;
         private TextView name;
         private TextView description;
+        private TextView numberWaitingTickets;
 
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +85,7 @@ public class StoreList extends Fragment {
             storeCardView = itemView.findViewById(R.id.store_card_view);
             name = itemView.findViewById(R.id.store_name);
             description = itemView.findViewById(R.id.store_location);
+            numberWaitingTickets = itemView.findViewById(R.id.store_number_waiting_tickets);
         }
     }
 
@@ -107,6 +109,7 @@ public class StoreList extends Fragment {
 
             holder.name.setText(TextAdjust.toTitleCase(store.getName()));
             holder.description.setText(TextAdjust.toTitleCase(store.getCity()));
+            //holder.numberWaitingTickets.setText(store.getnWaiting());
         }
 
         @Override
