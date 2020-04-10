@@ -14,4 +14,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="example_user">Example user</string>
     <string name="example_title">Example title</string>
+    <string name="store_logo">Store Logo</string>
 </resources>
