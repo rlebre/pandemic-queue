@@ -15,4 +15,5 @@
     <string name="example_user">Example user</string>
     <string name="example_title">Example title</string>
     <string name="store_logo">Store Logo</string>
+    <string name="get_ticket">Get ticket</string>
 </resources>

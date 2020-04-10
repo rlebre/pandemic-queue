@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.models.Store;
 import com.ruilebre.pandemicqueue.services.StoreService;
+import com.ruilebre.pandemicqueue.ui.store.StoreFragment;
 import com.ruilebre.pandemicqueue.utils.ApiUtils;
 import com.ruilebre.pandemicqueue.utils.TextAdjust;
 
@@ -70,6 +73,8 @@ public class StoreListFragment extends Fragment {
     }
 
     private class StoreListRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private CardView cardView;
+
         private ImageView image;
         private TextView name;
         private TextView description;
@@ -82,6 +87,8 @@ public class StoreListFragment extends Fragment {
         public StoreListRecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
             super(inflater.inflate(R.layout.store_item, container, false));
 
+            cardView = itemView.findViewById(R.id.store_card_view);
+
             image = itemView.findViewById(R.id.store_image);
             name = itemView.findViewById(R.id.store_name);
             description = itemView.findViewById(R.id.store_location);
@@ -91,7 +98,6 @@ public class StoreListFragment extends Fragment {
     }
 
     private class StoreListRecyclerViewAdapter extends RecyclerView.Adapter<StoreListRecyclerViewHolder> {
-        private final String[] DEFAULT_STORES = {"pingo", "doce", "continente", "spar", "lidl", "auchan", "meu", "super"};
         private List<Store> storeList;
 
         public StoreListRecyclerViewAdapter(List<Store> storeList) {
@@ -113,6 +119,13 @@ public class StoreListFragment extends Fragment {
             holder.name.setText(TextAdjust.toTitleCase(store.getName()));
             holder.description.setText(TextAdjust.toTitleCase(store.getCity()));
             holder.numberWaitingTickets.setText(String.valueOf(store.getnWaiting()));
+
+            holder.cardView.setOnClickListener(v -> {
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                StoreFragment myFragment = StoreFragment.newInstance(store);
+
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.container, myFragment).addToBackStack(null).commit();
+            });
         }
 
         @Override
