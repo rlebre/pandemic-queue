@@ -7,12 +7,13 @@ public class Store {
     private String name;
     private String city;
     private String address;
-    private int nWating;
+    private int nWaiting;
     private Date lastOnQueue;
     private Date lastEnteredStore;
     private int capacity;
     private Ticket[] waitingTickets;
     private PandemicUser[] usersSubscribed;
+    private String parentStore;
 
     public String get_id() {
         return _id;
@@ -46,12 +47,12 @@ public class Store {
         this.address = address;
     }
 
-    public int getnWating() {
-        return nWating;
+    public int getnWaiting() {
+        return nWaiting;
     }
 
-    public void setnWating(int nWating) {
-        this.nWating = nWating;
+    public void setnWaiting(int nWaiting) {
+        this.nWaiting = nWaiting;
     }
 
     public Date getLastOnQueue() {
@@ -94,6 +95,14 @@ public class Store {
         this.usersSubscribed = usersSubscribed;
     }
 
+    public String getParentStore() {
+        return parentStore;
+    }
+
+    public void setParentStore(String parentStore) {
+        this.parentStore = parentStore;
+    }
+
     @Override
     public String toString() {
         return "Store{" +
@@ -101,7 +110,7 @@ public class Store {
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
                 ", address='" + address + '\'' +
-                ", nWating=" + nWating +
+                ", nWating=" + nWaiting +
                 ", lastOnQueue=" + lastOnQueue +
                 ", lastEnteredStire=" + lastEnteredStore +
                 ", capacity=" + capacity +
