@@ -1,15 +1,15 @@
-package com.ruilebre.pandemicqueue.ui.store;
+package com.ruilebre.pandemicqueue.ui.storelist;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,7 +59,7 @@ public class StoreListFragment extends Fragment {
 
             if (storeListResult != null) {
                 loadingProgressBar.setVisibility(View.GONE);
-                recyclerView.setAdapter(new RecyclerViewAdapter(storeListResult));
+                recyclerView.setAdapter(new StoreListRecyclerViewAdapter(storeListResult));
             } else {
 
             }
@@ -69,52 +69,76 @@ public class StoreListFragment extends Fragment {
         storeListViewModel.getStoreList();
     }
 
-    private class RecyclerViewHolder extends RecyclerView.ViewHolder {
-        private CardView storeCardView;
+    private class StoreListRecyclerViewHolder extends RecyclerView.ViewHolder {
+        private ImageView image;
         private TextView name;
         private TextView description;
         private TextView numberWaitingTickets;
 
-        public RecyclerViewHolder(@NonNull View itemView) {
+        public StoreListRecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public RecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
+        public StoreListRecyclerViewHolder(LayoutInflater inflater, ViewGroup container) {
             super(inflater.inflate(R.layout.store_item, container, false));
 
-            storeCardView = itemView.findViewById(R.id.store_card_view);
+            image = itemView.findViewById(R.id.store_image);
             name = itemView.findViewById(R.id.store_name);
             description = itemView.findViewById(R.id.store_location);
             numberWaitingTickets = itemView.findViewById(R.id.store_number_waiting_tickets);
+
         }
     }
 
-    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
+    private class StoreListRecyclerViewAdapter extends RecyclerView.Adapter<StoreListRecyclerViewHolder> {
+        private final String[] DEFAULT_STORES = {"pingo", "doce", "continente", "spar", "lidl", "auchan", "meu", "super"};
         private List<Store> storeList;
 
-        public RecyclerViewAdapter(List<Store> storeList) {
+        public StoreListRecyclerViewAdapter(List<Store> storeList) {
             this.storeList = storeList;
         }
 
         @Override
-        public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public StoreListRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-            return new RecyclerViewHolder(layoutInflater, parent);
+            return new StoreListRecyclerViewHolder(layoutInflater, parent);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull StoreListRecyclerViewHolder holder, int position) {
             Store store = storeList.get(position);
 
+            holder.image.setImageResource(findStore(store.getParentStore()));
             holder.name.setText(TextAdjust.toTitleCase(store.getName()));
             holder.description.setText(TextAdjust.toTitleCase(store.getCity()));
-            //holder.numberWaitingTickets.setText(store.getnWaiting());
+            holder.numberWaitingTickets.setText(String.valueOf(store.getnWaiting()));
         }
 
         @Override
         public int getItemCount() {
             return storeList.size();
         }
+
+        private int findStore(String parentStore) {
+            switch (parentStore) {
+                case "pingodoce":
+                    return R.drawable.ic_pingo_doce;
+                case "auchan":
+                    return R.drawable.ic_auchan;
+                case "continente":
+                case "meusuper":
+                    return R.drawable.ic_continente;
+                case "dia":
+                    return R.drawable.ic_dia;
+                case "lidl":
+                    return R.drawable.ic_lidl;
+                case "spar":
+                    return R.drawable.ic_spar;
+            }
+            return 0;
+        }
     }
+
+
 }

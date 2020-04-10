@@ -1,4 +1,4 @@
-package com.ruilebre.pandemicqueue.ui.store;
+package com.ruilebre.pandemicqueue.ui.storelist;
 
 import android.util.Log;
 
