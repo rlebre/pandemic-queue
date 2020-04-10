@@ -1,5 +1,6 @@
 package com.ruilebre.pandemicqueue.ui.login;
 
+import android.util.Log;
 import android.util.Patterns;
 
 import androidx.lifecycle.LiveData;
@@ -87,7 +88,7 @@ public class LoginViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                Log.d("DEBUG", t.getMessage());
             }
         });
     }

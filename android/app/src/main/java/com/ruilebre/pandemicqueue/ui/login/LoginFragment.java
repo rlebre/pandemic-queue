@@ -12,10 +12,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
@@ -51,15 +53,7 @@ public class LoginFragment extends Fragment {
         final Button loginButton = view.findViewById(R.id.login);
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
 
-
         userService = ApiUtils.getUserService();
-
-        /*if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, LoginFragment.newInstance())
-                    .commitNow();
-        }*/
-
         loginViewModel = new LoginViewModel(userService);
 
         String token = this.getSessionKey();
@@ -127,34 +121,18 @@ public class LoginFragment extends Fragment {
             if (loginResult.getError() == false) {
                 setSessionKey();
                 updateUiWithUser(loginResult.getMessage());
+                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.loginFragmentToStoreListFragment);
             }
-
-            //this.getActivity().setResult(Activity.RESULT_OK);
-
-            //Complete and destroy login activity once successful
-            //finish();
         });
-    }
-
-    private boolean validateLogin(String username, String password) {
-        if (username == null || username.trim().length() == 0) {
-            //Toast.makeText(this, "Username is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (password == null || password.trim().length() == 0) {
-            //Toast.makeText(this, "Password is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
     }
 
     private void updateUiWithUser(String model) {
         String welcome = getString(R.string.welcome) + model;
-        // Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(String errorString) {
-        // Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
     private void setSessionKey() {
