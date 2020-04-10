@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.auth0.jwt.interfaces.Claim;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 import com.google.gson.Gson;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.NormalizedError;
@@ -46,9 +46,9 @@ public class LoginViewModel extends ViewModel {
 
     public void offlineLogin(SessionToken token) {
         if (token.isValid()) {
-            DecodedJWT decodedJWT = token.decode();
-            Claim userId = decodedJWT.getClaim("userId");
-            Claim username = decodedJWT.getClaim("username");
+            JWT jwt = token.getJwtToken();
+            Claim userId = jwt.getClaim("userId");
+            Claim username = jwt.getClaim("username");
             LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
             loginResult.setValue(new LoginResult(false, data.getDisplayName()));
         } else {
@@ -68,9 +68,9 @@ public class LoginViewModel extends ViewModel {
                 if (response.isSuccessful()) {
                     SessionToken token = (SessionToken) response.body();
 
-                    DecodedJWT decodedJWT = token.decode();
-                    Claim userId = decodedJWT.getClaim("userId");
-                    Claim username = decodedJWT.getClaim("username");
+                    JWT jwt = token.getJwtToken();
+                    Claim userId = jwt.getClaim("userId");
+                    Claim username = jwt.getClaim("username");
                     LoggedInUser data = LoggedInUser.getInstance(userId.asString(), username.asString(), token);
                     loginResult.setValue(new LoginResult(false, data.getDisplayName()));
                 } else {

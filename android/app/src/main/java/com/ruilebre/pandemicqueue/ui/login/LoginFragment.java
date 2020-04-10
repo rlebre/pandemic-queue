@@ -58,7 +58,7 @@ public class LoginFragment extends Fragment {
 
         String token = this.getSessionKey();
         if (token != null) {
-            SessionToken sessionToken = new SessionToken();
+            SessionToken sessionToken = new SessionToken(token);
             sessionToken.setToken(token);
             loginViewModel.offlineLogin(sessionToken);
         }
