@@ -66,7 +66,7 @@ public class LoginViewModel extends ViewModel {
             @Override
             public void onResponse(Call call, retrofit2.Response response) {
                 if (response.isSuccessful()) {
-                    SessionToken token = (SessionToken) response.body();
+                    SessionToken token = new SessionToken(((SessionToken) response.body()).getToken());
 
                     JWT jwt = token.getJwtToken();
                     Claim userId = jwt.getClaim("userId");
