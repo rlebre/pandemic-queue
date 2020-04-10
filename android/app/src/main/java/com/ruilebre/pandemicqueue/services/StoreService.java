@@ -25,4 +25,7 @@ public interface StoreService {
 
     @GET(StoreEndpoint.GET_STORE_DETAILS)
     Call<Store> getStoreDetails(@Query("store") String store);
+
+    @GET(StoreEndpoint.GET_STORE_LIST)
+    Call<List<Store>> getStoreList();
 }
