@@ -90,3 +90,14 @@ exports.getStoreDetails = function (req, res) {
             return res.json(existingStore);
         });
 }
+
+exports.getStoreList = function (req, res) {
+    Store.find({})
+        .exec(function (err, stores) {
+            if (err) {
+                console.log(err);
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+            return res.json(stores);
+        });
+}
