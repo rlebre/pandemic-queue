@@ -29,7 +29,12 @@ const storeSchema = new Schema({
     lastEnteredStore: { type: Date },
     capacity: { type: Number },
     waitingTickets: [{ type: Schema.Types.ObjectId, ref: 'Ticket' }],
-    usersSubscribed: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    usersSubscribed: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    parentStore: {
+        type: String,
+        required: true,
+        lowercase: true
+    },
 });
 
 

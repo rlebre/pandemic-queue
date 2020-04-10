@@ -3,7 +3,7 @@ const Store = require('../models/store')
 const { normalizeErrors } = require('../helpers/mongoose');
 
 exports.createStore = function (req, res) {
-    const { name, city, address, capacity } = req.body;
+    const { name, city, address, capacity, parentStore } = req.body;
 
     if (!name || !city || !address || !capacity) {
         return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide name, city, address and acapacity." }] });
@@ -27,7 +27,8 @@ exports.createStore = function (req, res) {
                 lastOnQueue: null,
                 lastEnteredStore: null,
                 capacity,
-                nWaitingTickets: []
+                nWaitingTickets: [],
+                parentStore
             });
 
         store.save(function (err) {
