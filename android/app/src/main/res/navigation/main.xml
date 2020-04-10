@@ -10,10 +10,10 @@
         android:label="LoginFragment">
         <action
             android:id="@+id/showStoreList"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/loginFragmentToStoreListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/loginFragmentToStoreListFragment"
         android:name="com.ruilebre.pandemicqueue.ui.store.StoreList"
         android:label="StoreListFragment"></fragment>
 </navigation>
