@@ -16,4 +16,6 @@
     <string name="example_title">Example title</string>
     <string name="store_logo">Store Logo</string>
     <string name="get_ticket">Get ticket</string>
+
+    <string name="google_maps_api_key">AIzaSyAYEHnK6GKTon6Ha65T_akUz3i8O8vHWKI</string>
 </resources>
