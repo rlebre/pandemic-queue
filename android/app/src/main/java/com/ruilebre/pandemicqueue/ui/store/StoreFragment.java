@@ -60,7 +60,9 @@ public class StoreFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
-
+        if (getArguments() != null) {
+            store = (Store) getArguments().getSerializable(STORE_PARAM);
+        }
         return view;
     }
 
