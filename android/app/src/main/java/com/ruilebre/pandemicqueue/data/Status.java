@@ -10,4 +10,11 @@ public class Status {
     public void setRegistered(String registered) {
         this.registered = registered;
     }
+
+    @Override
+    public String toString() {
+        return "Status{" +
+                "registered='" + registered + '\'' +
+                '}';
+    }
 }

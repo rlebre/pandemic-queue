@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.models.Store;
+import com.ruilebre.pandemicqueue.services.TicketService;
+import com.ruilebre.pandemicqueue.utils.ApiUtils;
 import com.ruilebre.pandemicqueue.utils.TextAdjust;
 
 import java.io.IOException;
@@ -49,6 +52,8 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
     private MapView storeLocationMapView;
     private Button storeTicketButton;
 
+    private TicketService ticketService;
+    private StoreViewModel storeViewModel;
 
     private Store store;
 
@@ -76,17 +81,41 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_store, container, false);
+
         if (getArguments() != null) {
             store = (Store) getArguments().getSerializable(STORE_PARAM);
         }
+
         storeLocationMapView = view.findViewById(R.id.store_details_mapView);
         initGoogleMap(savedInstanceState);
+
+        ticketService = ApiUtils.getTicketService();
+        storeViewModel = new StoreViewModel(ticketService, store);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        storeViewModel.getCallTicketResult().observe(getViewLifecycleOwner(), result -> {
+            if (result == null) {
+                return;
+            } else {
+                //loadingProgressBar.setVisibility(View.GONE);
+                Log.d("TICKET", result.toString());
+            }
+        });
+
+        storeViewModel.getCreateTicketResult().observe(getViewLifecycleOwner(), result -> {
+            if (result == null) {
+                return;
+            } else {
+                //loadingProgressBar.setVisibility(View.GONE);
+                Log.d("TICKET", result.toString());
+            }
+        });
 
         storeDetailsImageView = view.findViewById(R.id.store_details_image);
         storeNameTextView = view.findViewById(R.id.store_details_name);
@@ -121,7 +150,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
 
         storeCapacityTextView.setText(String.valueOf(store.getCapacity()));
         storeTicketButton.setOnClickListener(v -> {
-
+            storeViewModel.createTicket();
         });
     }
 
@@ -175,7 +204,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
             markerOptions.title(TextAdjust.toTitleCase(store.getName()));
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
 
-            Marker marker =  googleMap.addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions);
             marker.showInfoWindow();
 
             CameraUpdate center = CameraUpdateFactory.newLatLng(addressCoordinates);

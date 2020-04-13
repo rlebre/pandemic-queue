@@ -34,7 +34,7 @@ const storeSchema = new Schema({
         type: String,
         required: true,
         lowercase: true
-    },
+    }
 });
 
 
