@@ -94,6 +94,8 @@ exports.getStoreDetails = function (req, res) {
 
 exports.getStoreList = function (req, res) {
     Store.find({})
+        .populate('waitingTickets')
+        .populate('usersSubscribed')
         .exec(function (err, stores) {
             if (err) {
                 console.log(err);
