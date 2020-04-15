@@ -78,6 +78,8 @@ exports.getStoreDetails = function (req, res) {
     const name = req.query.name;
 
     Store.findOne({ name })
+        .populate('waitingTickets')
+        .populate('usersSubscribed')
         .exec(function (err, existingStore) {
             if (err) {
                 console.log(err);
@@ -94,8 +96,6 @@ exports.getStoreDetails = function (req, res) {
 
 exports.getStoreList = function (req, res) {
     Store.find({})
-        .populate('waitingTickets')
-        .populate('usersSubscribed')
         .exec(function (err, stores) {
             if (err) {
                 console.log(err);
