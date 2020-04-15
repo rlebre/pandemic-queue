@@ -128,3 +128,39 @@ exports.existTicket = function (req, res) {
             res.json({ 'status': true, 'ticketExists': ticketExists });
         });
 }
+
+exports.cancelTicket = function (req, res) {
+    const { store } = req.body;
+    const user = res.locals.user;
+
+    if (!store) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
+    }
+
+    Store.findById(store._id)
+        .populate('waitingTickets')
+        .exec((err, existingStore) => {
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+
+            if (!existingStore) {
+                return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist!" }] });
+            }
+
+            const ticket = existingStore.waitingTickets.find(ticket => ticket.user._id.equals(user._id) && ticket.enteredStoreTimestamp == null);
+
+            if (!ticket) {
+                return res.status(422).send({ errors: [{ title: "Invalid ticket!", detail: "Ticket for this user does not exist in this store." }] });
+            }
+
+
+            ticket.remove(function (err) {
+                if (err) {
+                    return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                }
+
+                res.json({ 'status': true, 'ticket': 'removed' });
+            });
+        });
+}

@@ -6,5 +6,6 @@ const UserCtrl = require("../controllers/user");
 router.post("/create", UserCtrl.authMiddleware, Ticket.createTicket);
 router.post("/call", UserCtrl.authMiddleware, Ticket.callTicket);
 router.get("/exist", UserCtrl.authMiddleware, Ticket.existTicket);
+router.get("/cancel", UserCtrl.authMiddleware, Ticket.cancelTicket);
 
 module.exports = router;
