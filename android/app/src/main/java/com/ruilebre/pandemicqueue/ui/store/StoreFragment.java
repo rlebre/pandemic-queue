@@ -143,7 +143,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
             labelLastOnQueue.setVisibility(View.VISIBLE);
         }
 
-        if (store.getLastOnQueue() != null) {
+        if (store.getLastEnteredStore() != null) {
             storeLastEnteredStoreTextView.setText(f.format(store.getLastEnteredStore()));
             storeLastEnteredStoreTextView.setVisibility(View.VISIBLE);
             labelLastEnteredStore.setVisibility(View.VISIBLE);
