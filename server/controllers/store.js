@@ -96,6 +96,8 @@ exports.getStoreDetails = function (req, res) {
 
 exports.getStoreList = function (req, res) {
     Store.find({})
+        .select("-waitingTickets")
+        .select("-usersSubscribed")
         .exec(function (err, stores) {
             if (err) {
                 console.log(err);
