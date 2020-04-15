@@ -1,20 +1,13 @@
 package com.ruilebre.pandemicqueue.data;
 
 public class Status {
-    private String registered;
+    private String status;
 
-    public String getRegistered() {
-        return registered;
+    public String getStatus() {
+        return status;
     }
 
-    public void setRegistered(String registered) {
-        this.registered = registered;
-    }
-
-    @Override
-    public String toString() {
-        return "Status{" +
-                "registered='" + registered + '\'' +
-                '}';
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
