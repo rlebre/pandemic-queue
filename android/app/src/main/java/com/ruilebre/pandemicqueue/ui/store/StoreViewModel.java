@@ -9,8 +9,10 @@ import androidx.lifecycle.ViewModel;
 import com.google.gson.Gson;
 import com.ruilebre.pandemicqueue.data.NormalizedError;
 import com.ruilebre.pandemicqueue.data.Status;
+import com.ruilebre.pandemicqueue.data.StatusCheckTicket;
 import com.ruilebre.pandemicqueue.data.models.LoggedInUser;
 import com.ruilebre.pandemicqueue.data.models.Store;
+import com.ruilebre.pandemicqueue.services.StoreService;
 import com.ruilebre.pandemicqueue.services.TicketService;
 
 import org.json.JSONException;
@@ -24,50 +26,89 @@ import retrofit2.Callback;
 
 
 public class StoreViewModel extends ViewModel {
-    private TicketService ticketService;
-    private Store store;
-    private MutableLiveData<Status> callTicketResult = new MutableLiveData<>();
-    private MutableLiveData<Status> createTicketResult = new MutableLiveData<>();
+    private static final String TAG = "StoreViewModel";
 
-    StoreViewModel(TicketService ticketService, Store store) {
+    private TicketService ticketService;
+    private StoreService storeService;
+    private Store store;
+
+    private MutableLiveData<Store> getStoreDetailsResult = new MutableLiveData<>();
+    private MutableLiveData<Status> createTicketResult = new MutableLiveData<>();
+    private MutableLiveData<StatusCheckTicket> checkTicketResult = new MutableLiveData<>();
+
+    StoreViewModel(TicketService ticketService, StoreService storeService, Store store) {
+        this.storeService = storeService;
         this.ticketService = ticketService;
         this.store = store;
     }
 
-    LiveData<Status> getCallTicketResult() {
-        return callTicketResult;
+    LiveData<Store> getStoreDetailsResult() {
+        return getStoreDetailsResult;
+    }
+
+    LiveData<StatusCheckTicket> getCheckTicketResult() {
+        return checkTicketResult;
     }
 
     LiveData<Status> getCreateTicketResult() {
         return createTicketResult;
     }
 
-    public void callTicket() {
+    public void getStoreDetails() {
         String userToken = LoggedInUser.getInstance().getToken().getToken();
 
-        Call call = ticketService.callTicket("Bearer " + userToken, this.getStoreBody());
+        Call call = storeService.getStoreDetails(store.getName());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, retrofit2.Response response) {
                 if (response.isSuccessful()) {
-                    Status status = (Status) response.body();
+                    Store store = (Store) response.body();
 
-                    callTicketResult.setValue(status);
+                    getStoreDetailsResult.setValue(store);
                 } else {
                     try {
                         JSONObject jsonError = new JSONObject(response.errorBody().string());
                         jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
                         NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
-                        Log.e("TICKET", normalizedError.toString());
+                        Log.e(TAG, normalizedError.toString());
                     } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
 
+    public void checkTicket() {
+        String userToken = LoggedInUser.getInstance().getToken().getToken();
+
+        Call call = ticketService.checkTicket("Bearer " + userToken, this.getStoreBody());
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, retrofit2.Response response) {
+                if (response.isSuccessful()) {
+                    StatusCheckTicket status = (StatusCheckTicket) response.body();
+                    checkTicketResult.setValue(status);
+                } else {
+                    try {
+                        JSONObject jsonError = new JSONObject(response.errorBody().string());
+                        jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
+                        NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
+                        Log.e(TAG, normalizedError.toString());
+                    } catch (JSONException | IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, t.getMessage());
             }
         });
     }
@@ -88,16 +129,16 @@ public class StoreViewModel extends ViewModel {
                         JSONObject jsonError = new JSONObject(response.errorBody().string());
                         jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
                         NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
-                        Log.e("TICKET", normalizedError.toString());
+                        Log.e(TAG, normalizedError.toString());
                     } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, e.getMessage());
                     }
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                Log.e(TAG, t.getMessage());
             }
         });
     }
