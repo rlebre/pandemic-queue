@@ -104,7 +104,7 @@ exports.callTicket = function (req, res) {
         });
 }
 
-exports.checkTicket = function (req, res) {
+exports.existTicket = function (req, res) {
     const { store } = req.body;
     const user = res.locals.user;
 
