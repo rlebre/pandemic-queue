@@ -25,6 +25,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ruilebre.pandemicqueue.R;
@@ -207,11 +208,15 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
             Marker marker = googleMap.addMarker(markerOptions);
             marker.showInfoWindow();
 
-            CameraUpdate center = CameraUpdateFactory.newLatLng(addressCoordinates);
-            CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+            CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
 
-            googleMap.moveCamera(center);
-            googleMap.moveCamera(zoom);
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(marker.getPosition());
+            LatLngBounds bounds = builder.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 0);
+
+            googleMap.moveCamera(cu);
+            googleMap.animateCamera(zoom);
         }
     }
 }
