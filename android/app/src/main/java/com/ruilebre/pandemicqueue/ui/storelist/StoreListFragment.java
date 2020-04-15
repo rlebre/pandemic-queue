@@ -23,6 +23,7 @@ import com.ruilebre.pandemicqueue.ui.store.StoreFragment;
 import com.ruilebre.pandemicqueue.utils.ApiUtils;
 import com.ruilebre.pandemicqueue.utils.TextAdjust;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class StoreListFragment extends Fragment {
@@ -54,7 +55,7 @@ public class StoreListFragment extends Fragment {
 
         RecyclerView recyclerView = view.findViewById(R.id.store_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        recyclerView.setAdapter(new StoreListRecyclerViewAdapter(new LinkedList<>()));
         storeListViewModel.getStoreListResult().observe(getViewLifecycleOwner(), storeListResult -> {
             if (storeListResult == null) {
                 return;
