@@ -103,3 +103,28 @@ exports.callTicket = function (req, res) {
             });
         });
 }
+
+exports.checkTicket = function (req, res) {
+    const { store } = req.body;
+    const user = res.locals.user;
+
+    if (!store) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
+    }
+
+    Store.findById(store._id)
+        .populate('waitingTickets')
+        .exec((err, existingStore) => {
+            if (err) {
+                return res.status(422).send({ errors: normalizeErrors(err.errors) });
+            }
+
+            if (!existingStore) {
+                return res.status(422).send({ errors: [{ title: "Invalid store!", detail: "Store does not exist!" }] });
+            }
+
+            const ticketExists = existingStore.waitingTickets.find(ticket => ticket.user._id.equals(user._id) && ticket.enteredStoreTimestamp == null) ? true : false;
+
+            res.json({ 'status': true, 'ticketExists': ticketExists });
+        });
+}
