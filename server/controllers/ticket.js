@@ -105,14 +105,14 @@ exports.callTicket = function (req, res) {
 }
 
 exports.existTicket = function (req, res) {
-    const { store } = req.body;
+    const store = req.query.store;
     const user = res.locals.user;
 
     if (!store) {
         return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
     }
 
-    Store.findById(store._id)
+    Store.findOne({ name: store })
         .populate('waitingTickets')
         .exec((err, existingStore) => {
             if (err) {
