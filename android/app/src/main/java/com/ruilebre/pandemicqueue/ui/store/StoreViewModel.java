@@ -35,6 +35,7 @@ public class StoreViewModel extends ViewModel {
     private MutableLiveData<Store> getStoreDetailsResult = new MutableLiveData<>();
     private MutableLiveData<Status> createTicketResult = new MutableLiveData<>();
     private MutableLiveData<StatusCheckTicket> checkTicketResult = new MutableLiveData<>();
+    private MutableLiveData<Status> cancelTicketResult = new MutableLiveData<>();
 
     StoreViewModel(TicketService ticketService, StoreService storeService, Store store) {
         this.storeService = storeService;
@@ -52,6 +53,10 @@ public class StoreViewModel extends ViewModel {
 
     LiveData<Status> getCreateTicketResult() {
         return createTicketResult;
+    }
+
+    LiveData<Status> getCancelTicketResult() {
+        return cancelTicketResult;
     }
 
     public void getStoreDetails() {
@@ -87,13 +92,42 @@ public class StoreViewModel extends ViewModel {
     public void checkTicket() {
         String userToken = LoggedInUser.getInstance().getToken().getToken();
 
-        Call call = ticketService.checkTicket("Bearer " + userToken, this.getStoreBody());
+        Call call = ticketService.checkTicket("Bearer " + userToken, store.getName());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, retrofit2.Response response) {
                 if (response.isSuccessful()) {
                     StatusCheckTicket status = (StatusCheckTicket) response.body();
                     checkTicketResult.setValue(status);
+                } else {
+                    try {
+                        JSONObject jsonError = new JSONObject(response.errorBody().string());
+                        jsonError = jsonError.getJSONArray("errors").getJSONObject(0);
+                        NormalizedError normalizedError = new Gson().fromJson(jsonError.toString(), NormalizedError.class);
+                        Log.e(TAG, normalizedError.toString());
+                    } catch (JSONException | IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Log.e(TAG, t.getMessage());
+            }
+        });
+    }
+
+    public void cancelTicket() {
+        String userToken = LoggedInUser.getInstance().getToken().getToken();
+
+        Call call = ticketService.cancelTicket("Bearer " + userToken, store.getName());
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, retrofit2.Response response) {
+                if (response.isSuccessful()) {
+                    Status status = (Status) response.body();
+                    cancelTicketResult.setValue(status);
                 } else {
                     try {
                         JSONObject jsonError = new JSONObject(response.errorBody().string());

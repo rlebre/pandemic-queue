@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ruilebre.pandemicqueue.R;
 import com.ruilebre.pandemicqueue.data.models.Store;
+import com.ruilebre.pandemicqueue.services.StoreService;
 import com.ruilebre.pandemicqueue.services.TicketService;
 import com.ruilebre.pandemicqueue.utils.ApiUtils;
 import com.ruilebre.pandemicqueue.utils.TextAdjust;
@@ -41,6 +43,7 @@ import java.util.List;
 
 
 public class StoreFragment extends Fragment implements OnMapReadyCallback {
+    private static final String TAG = "StoreFragment";
     private static final String STORE_PARAM = "STORE";
 
     private ImageView storeDetailsImageView;
@@ -51,9 +54,11 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
     private TextView storeLastEnteredStoreTextView;
     private TextView storeCapacityTextView;
     private MapView storeLocationMapView;
-    private Button storeTicketButton;
+    private Button storeGetTicketButton;
+    private Button storeCancelTicketButton;
 
     private TicketService ticketService;
+    private StoreService storeService;
     private StoreViewModel storeViewModel;
 
     private Store store;
@@ -91,7 +96,8 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
         initGoogleMap(savedInstanceState);
 
         ticketService = ApiUtils.getTicketService();
-        storeViewModel = new StoreViewModel(ticketService, store);
+        storeService = ApiUtils.getStoreService();
+        storeViewModel = new StoreViewModel(ticketService, storeService, store);
 
         return view;
     }
@@ -100,24 +106,6 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        storeViewModel.getCallTicketResult().observe(getViewLifecycleOwner(), result -> {
-            if (result == null) {
-                return;
-            } else {
-                //loadingProgressBar.setVisibility(View.GONE);
-                Log.d("TICKET", result.toString());
-            }
-        });
-
-        storeViewModel.getCreateTicketResult().observe(getViewLifecycleOwner(), result -> {
-            if (result == null) {
-                return;
-            } else {
-                //loadingProgressBar.setVisibility(View.GONE);
-                Log.d("TICKET", result.toString());
-            }
-        });
-
         storeDetailsImageView = view.findViewById(R.id.store_details_image);
         storeNameTextView = view.findViewById(R.id.store_details_name);
         storeLocationTextView = view.findViewById(R.id.store_details_location);
@@ -125,10 +113,45 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
         storeLastOnQueueTextView = view.findViewById(R.id.store_details_lastOnQueue);
         storeLastEnteredStoreTextView = view.findViewById(R.id.store_details_lastEnteredStore);
         storeCapacityTextView = view.findViewById(R.id.store_details_capacity);
-        storeTicketButton = view.findViewById(R.id.button_ticket);
-
+        storeGetTicketButton = view.findViewById(R.id.button_create_ticket);
+        storeCancelTicketButton = view.findViewById(R.id.button_cancel_ticket);
         TextView labelLastOnQueue = view.findViewById(R.id.labelLastOnQueue);
         TextView labelLastEnteredStore = view.findViewById(R.id.labelLastEnteredStore);
+
+        storeViewModel.getCreateTicketResult().observe(getViewLifecycleOwner(), status -> {
+            if (status == null) {
+                return;
+            } else {
+                if (status.getStatus()) {
+                    Toast.makeText(getContext(), getString(R.string.ticket_reserved), Toast.LENGTH_LONG).show();
+                    storeGetTicketButton.setVisibility(View.GONE);
+                    storeCancelTicketButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        storeViewModel.getCheckTicketResult().observe(getViewLifecycleOwner(), statusCheckTicket -> {
+            if (statusCheckTicket == null) {
+                return;
+            } else {
+                if (statusCheckTicket.getTicketExists()) {
+                    storeGetTicketButton.setVisibility(View.GONE);
+                    storeCancelTicketButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        storeViewModel.getCancelTicketResult().observe(getViewLifecycleOwner(), status -> {
+            if (status == null) {
+                return;
+            } else {
+                if (status.getStatus()) {
+                    Toast.makeText(getContext(), getString(R.string.ticket_canceled), Toast.LENGTH_LONG).show();
+                    storeGetTicketButton.setVisibility(View.VISIBLE);
+                    storeCancelTicketButton.setVisibility(View.GONE);
+                }
+            }
+        });
 
         storeDetailsImageView.setImageResource(findStore(store.getParentStore()));
         storeNameTextView.setText(TextAdjust.toTitleCase(store.getName()));
@@ -150,9 +173,15 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
         }
 
         storeCapacityTextView.setText(String.valueOf(store.getCapacity()));
-        storeTicketButton.setOnClickListener(v -> {
+        storeGetTicketButton.setOnClickListener(v -> {
             storeViewModel.createTicket();
         });
+
+        storeCancelTicketButton.setOnClickListener(v -> {
+            storeViewModel.cancelTicket();
+        });
+
+        storeViewModel.checkTicket();
     }
 
     private int findStore(String parentStore) {
@@ -195,7 +224,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
             try {
                 addressList = geocoder.getFromLocationName(store.getAddress(), 1);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
 
             LatLng addressCoordinates = new LatLng(addressList.get(0).getLatitude(), addressList.get(0).getLongitude());
