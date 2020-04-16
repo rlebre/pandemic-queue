@@ -22,6 +22,7 @@ import retrofit2.Callback;
 
 
 public class StoreListViewModel extends ViewModel {
+    private static final String TAG = StoreListViewModel.class.getName();
     private StoreService storeService;
     private MutableLiveData<List<Store>> storeListResult = new MutableLiveData<>();
 
@@ -56,7 +57,7 @@ public class StoreListViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call call, Throwable t) {
-
+                Log.e(TAG, t.getMessage());
             }
         });
     }
