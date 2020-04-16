@@ -11,10 +11,17 @@ const subscriptionsRoutes = require('./routes/subscriptions');
 const app = express();
 app.use(bodyParser.json());
 
-mongoose.connect(config.DB_URI, { useNewUrlParser: true }).then(() => {
+mongoose.connect(
+    config.DB_URI,
+    {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true
+    }
+).then(() => {
     if (process.env.NODE_ENV === 'dev') {
         const fakeDb = new FakeDb();
-        //fakeDb.seedDb();
+        fakeDb.seedDb();
     }
 });
 
@@ -26,4 +33,7 @@ app.use('/api/v1/subscriptions', subscriptionsRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log('Server is running.'))
+app.listen(PORT, () => {
+    console.log('Server is running.')
+});
+

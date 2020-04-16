@@ -155,20 +155,21 @@ exports.cancelTicket = function (req, res) {
             }
 
 
-            ticket.remove(function (err) {
-                if (err) {
-                    return res.status(422).send({ errors: normalizeErrors(err.errors) });
-                }
-
-                existingStore.waitingTickets.pull(ticket)
-                existingStore.nWaiting = existingStore.waitingTickets.length;
-                existingStore.save(function (err, doc) {
+            Ticket.deleteMany({ user: user, enteredStoreTimestamp: null })
+                .exec((err) => {
                     if (err) {
                         return res.status(422).send({ errors: normalizeErrors(err.errors) });
                     }
-                });
 
-                res.json({ 'status': true, 'ticket': 'removed' });
-            });
+                    existingStore.waitingTickets.pull(ticket)
+                    existingStore.nWaiting = existingStore.waitingTickets.length;
+                    existingStore.save(function (err, doc) {
+                        if (err) {
+                            return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                        }
+                    });
+
+                    res.json({ 'status': true, 'ticket': 'removed' });
+                });
         });
 }
