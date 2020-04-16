@@ -130,7 +130,7 @@ exports.existTicket = function (req, res) {
 }
 
 exports.cancelTicket = function (req, res) {
-    const { store } = req.body;
+    const store = req.query.store;
     const user = res.locals.user;
 
     if (!store) {
