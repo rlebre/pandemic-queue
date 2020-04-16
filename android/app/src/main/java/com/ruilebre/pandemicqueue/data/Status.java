@@ -1,13 +1,13 @@
 package com.ruilebre.pandemicqueue.data;
 
 public class Status {
-    private String status;
+    private boolean status;
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 }
