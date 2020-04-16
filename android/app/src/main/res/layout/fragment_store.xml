@@ -161,7 +161,7 @@
         android:layout_below="@+id/store_details_lastEnteredStore" />
 
     <Button
-        android:id="@+id/button_ticket"
+        android:id="@+id/button_create_ticket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/store_details_mapView"
@@ -169,5 +169,13 @@
         android:layout_alignParentEnd="true"
         android:text="@string/get_ticket" />
 
+    <Button
+        android:id="@+id/button_cancel_ticket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/store_details_mapView"
+        android:layout_alignParentEnd="true"
+        android:text="@string/cancel_ticket"
+        android:visibility="gone" />
 
 </RelativeLayout>
