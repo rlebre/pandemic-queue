@@ -57,7 +57,7 @@ class FakeDb {
             var name = "Meu Super " + store.name;
             var city = store.name;
             var address = store.latitude + ", " + store.longitude;
-            var capacity = parseInt(store.id) / 10;
+            var capacity = Math.floor(parseInt(store.id) / 10);
             var parentStore = "meusuper";
 
             this.saveStore(name, city, address, capacity, parentStore);
