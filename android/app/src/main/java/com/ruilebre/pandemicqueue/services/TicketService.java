@@ -14,6 +14,7 @@ import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TicketService {
@@ -27,5 +28,5 @@ public interface TicketService {
     Call<StatusCheckTicket> checkTicket(@Header("Authorization") String authorization, @Query("store") String store);
 
     @DELETE(TicketEndpoint.CANCEL_TICKET)
-    Call<Status> cancelTicket(@Header("Authorization") String authorization, @Field("store") String store);
+    Call<Status> cancelTicket(@Header("Authorization") String authorization, @Path("store") String store);
 }

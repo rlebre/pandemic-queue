@@ -121,7 +121,7 @@ public class StoreViewModel extends ViewModel {
     public void cancelTicket() {
         String userToken = LoggedInUser.getInstance().getToken().getToken();
 
-        Call call = ticketService.cancelTicket("Bearer " + userToken, store.getName());
+        Call call = ticketService.cancelTicket("Bearer " + userToken, store.get_id());
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, retrofit2.Response response) {
