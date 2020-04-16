@@ -11,7 +11,7 @@ exports.createTicket = function (req, res) {
     const enteredQueueTimestamp = moment.now();
 
     if (!store) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store." }] });
     }
 
     Store.findById(store._id)
@@ -63,7 +63,7 @@ exports.callTicket = function (req, res) {
     const enteredStoreTimestamp = moment.now();
 
     if (!store) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store." }] });
     }
 
     Store.findById(store._id)
@@ -130,14 +130,14 @@ exports.existTicket = function (req, res) {
 }
 
 exports.cancelTicket = function (req, res) {
-    const store = req.query.store;
+    const storeId = req.params.storeId;
     const user = res.locals.user;
 
-    if (!store) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store ." }] });
+    if (!storeId) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide store." }] });
     }
 
-    Store.findById(store._id)
+    Store.findById(storeId)
         .populate('waitingTickets')
         .exec((err, existingStore) => {
             if (err) {
