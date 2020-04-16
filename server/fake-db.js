@@ -1,14 +1,15 @@
 const Store = require("./models/store");
 const User = require("./models/user");
-const Ticket = require("./models/ticket");
 
-const fakeDbData = require('./data.json');
+const storesContinente = require('./data/stores/continente.json');
+const storesAuchan = require('./data/stores/auchan.json');
+const storesLidl = require('./data/stores/lidl.json');
+const storesMeusuper = require('./data/stores/meusuper.json');
+const storesPingodoce = require('./data/stores/pingodoce.json');
+
 
 class FakeDb {
     constructor() {
-        this.stores = fakeDbData.stores;
-        this.users = fakeDbData.users;
-        this.tickets = fakeDbData.tickets
     }
 
     pushUsersToDb() {
@@ -18,23 +19,117 @@ class FakeDb {
         });
     }
 
-    pushStoresToDb() {
-        this.stores.forEach(store => {
-            const newStore = new Store(store);
-            newStore.save();
+    saveStore(name, city, address, capacity, parentStore) {
+        const newStore = new Store(
+            {
+                name,
+                city,
+                address,
+                nWaiting: 0,
+                lastOnQueue: null,
+                lastEnteredStore: null,
+                capacity,
+                nWaitingTickets: [],
+                parentStore
+            });
+
+        newStore.save();
+    }
+
+    pushPingoDoceStores() {
+        var count = 0;
+        storesPingodoce.forEach(store => {
+            var name = "Pingo Doce " + store.name;
+            var city = store.county;
+            var address = store.address + " " + store.postal_code;
+            var capacity = parseInt(store.id);
+            var parentStore = "pingodoce";
+
+            this.saveStore(name, city, address, capacity, parentStore);
+            count++;
         });
+        console.log("Pingo Doce stores pushed: ", count);
+    }
+
+    pushMeuSuperStores() {
+        var count = 0;
+        storesMeusuper.forEach(store => {
+            var name = "Meu Super " + store.name;
+            var city = store.name;
+            var address = store.latitude + ", " + store.longitude;
+            var capacity = parseInt(store.id) / 10;
+            var parentStore = "meusuper";
+
+            this.saveStore(name, city, address, capacity, parentStore);
+            count++;
+        });
+        console.log("Meu Super stores pushed: ", count);
+    }
+
+    pushLidlStores() {
+        var count = 0;
+        storesLidl.forEach(store => {
+            var name = "Lidl" + store.Locality;
+            var city = store.Locality;
+            var address = store.AddressLine + ", " + store.PostalCode;
+            var capacity = parseInt(store.EntityID);
+            var parentStore = "lidl";
+
+            this.saveStore(name, city, address, capacity, parentStore);
+            count++;
+        });
+        console.log("Lidl stores pushed: ", count);
+    }
+
+    pushAuchanStores() {
+        var count = 0;
+        storesAuchan.forEach(store => {
+            var name = store.DisplayName;
+            var city = store.Address.City;
+            var address = store.Address.FullAddress;
+            var capacity = 500;
+            var parentStore = "auchan";
+
+            this.saveStore(name, city, address, capacity, parentStore);
+            count++;
+        });
+        console.log("Auchan stores pushed: ", count);
+    }
+
+    pushContinenteStores() {
+        var count = 0;
+        storesContinente.forEach(store => {
+            var name = store.name;
+            var city = store.city;
+            var address = store.streetAndNumber + " " + store.zip;
+            var capacity = parseInt(store.identifier);
+            var parentStore = "continente";
+
+            this.saveStore(name, city, address, capacity, parentStore);
+            count++;
+        });
+        console.log("Continente stores pushed: ", count);
+    }
+
+    pushStoresToDb() {
+        this.pushAuchanStores();
+        this.pushContinenteStores();
+        this.pushLidlStores();
+        this.pushMeuSuperStores();
+        this.pushPingoDoceStores();
     }
 
     async seedDb() {
+        console.log('\nCleaning database...');
         await this.cleanDb();
-        this.pushUsersToDb();
+
+
+        console.log('\nPushing stores to database...');
         this.pushStoresToDb();
     }
 
     async cleanDb() {
-        await User.remove({});
-        await Store.remove({});
-        await Ticket.remove({});
+        await Store.deleteMany({});
     }
 }
 
