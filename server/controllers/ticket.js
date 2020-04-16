@@ -160,6 +160,15 @@ exports.cancelTicket = function (req, res) {
                     return res.status(422).send({ errors: normalizeErrors(err.errors) });
                 }
 
+                existingStore.lastEnteredStore = enteredStoreTimestamp;
+                existingStore.waitingTickets.pull(ticket)
+                existingStore.nWaiting = existingStore.waitingTickets.length;
+                existingStore.save(function (err, doc) {
+                    if (err) {
+                        return res.status(422).send({ errors: normalizeErrors(err.errors) });
+                    }
+                });
+                
                 res.json({ 'status': true, 'ticket': 'removed' });
             });
         });
