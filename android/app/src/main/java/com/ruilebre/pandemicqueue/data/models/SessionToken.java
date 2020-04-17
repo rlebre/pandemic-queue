@@ -34,7 +34,7 @@ public class SessionToken {
     }
 
     public boolean isAuthenticated() {
-        return (token != null && this.isValid() ? true : false);
+        return (token != null && this.isValid());
     }
 
     @Override
