@@ -19,7 +19,7 @@
     },
     {
         "username": "test4",
-        "email": "test5@test.com",
+        "email": "test4@test.com",
         "password": "1234",
         "passwordConfirmation": "1234"
     },
