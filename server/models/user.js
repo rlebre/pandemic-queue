@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const userSchema = new Schema({
     username: {
         type: String,
+        required: "Username is required",
+        unique: true,
         max: [32, "Name too long. Max: 32 characters."],
         min: [4, "Name too long. Max: 4 characters."]
     },
@@ -17,7 +19,8 @@ const userSchema = new Schema({
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/]
     },
     password: {
-        type: String, required: true,
+        type: String,
+        required: true,
         max: [32, "Name too long. Max: 32 characters."],
         min: [4, "Name too long. Max: 4 characters."],
         required: "Password is required"

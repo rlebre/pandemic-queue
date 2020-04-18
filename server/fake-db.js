@@ -7,6 +7,8 @@ const storesLidl = require('./data/stores/lidl.json');
 const storesMeusuper = require('./data/stores/meusuper.json');
 const storesPingodoce = require('./data/stores/pingodoce.json');
 
+const users = require('./data/users/users.json');
+
 
 class FakeDb {
     constructor() {
@@ -111,6 +113,16 @@ class FakeDb {
         console.log("Continente stores pushed: ", count);
     }
 
+    pushUsersToDb() {
+        var count = 0;
+        users.forEach(user => {
+            const newUser = new User(user);
+            newUser.save();
+            count++;
+        });
+        console.log("Users pushed: ", count);
+    }
+
     pushStoresToDb() {
         this.pushAuchanStores();
         this.pushContinenteStores();
@@ -126,10 +138,14 @@ class FakeDb {
 
         console.log('\nPushing stores to database...');
         this.pushStoresToDb();
+
+        console.log('\nPushing users to database...');
+        this.pushUsersToDb();
     }
 
     async cleanDb() {
         await Store.deleteMany({});
+        await User.deleteMany({});
     }
 }
 
