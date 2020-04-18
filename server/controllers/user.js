@@ -4,13 +4,18 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 exports.auth = function (req, res) {
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
-    if (!password || !email) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide email and password." }] });
+    if (!password || (!email && !username)) {
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide username or email and password." }] });
     }
 
-    User.findOne({ email }, function (err, user) {
+    User.findOne({
+        $or: [
+            { email },
+            { username }
+        ]
+    }, function (err, user) {
         if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
@@ -25,7 +30,7 @@ exports.auth = function (req, res) {
                 username: user.username
             }, config.SECRET, { expiresIn: '24h' });
 
-            return res.json({'token': token});
+            return res.json({ 'token': token });
         } else {
             return res.status(422).send({ errors: [{ title: 'Wrong data!', detail: 'Wrong email or password.' }] });
         }
@@ -36,20 +41,25 @@ exports.register = function (req, res) {
     const { username, email, password, passwordConfirmation } = req.body;
 
     if (!password || !email) {
-        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide email and password." }] });
+        return res.status(422).send({ errors: [{ title: "Data missing!", detail: "Provide username or email and password." }] });
     }
 
     if (password !== passwordConfirmation) {
         return res.status(422).send({ errors: [{ title: "Invalid password!", detail: "Passwords don't match." }] });
     }
 
-    User.findOne({ email }, function (err, existingUser) {
+    User.findOne({
+        $or: [
+            { email },
+            { username }
+        ]
+    }, function (err, existingUser) {
         if (err) {
             return res.status(422).send({ errors: normalizeErrors(err.errors) });
         }
 
         if (existingUser) {
-            return res.status(422).send({ errors: [{ title: "Invalid email!", detail: "Email is already in use." }] });
+            return res.status(422).send({ errors: [{ title: "Invalid username or email!", detail: "Username or email is already in use." }] });
         }
 
         const user = new User({
