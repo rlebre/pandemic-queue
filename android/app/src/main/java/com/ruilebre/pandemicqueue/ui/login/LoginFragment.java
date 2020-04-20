@@ -121,7 +121,8 @@ public class LoginFragment extends Fragment {
             if (loginResult.getError() == false) {
                 setSessionKey();
                 updateUiWithUser(loginResult.getMessage());
-                NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.loginFragmentToStoreListFragment);
+                //NavHostFragment.findNavController(LoginFragment.this).navigate(R.id.loginFragmentToStoreListFragment);
+                NavHostFragment.findNavController(this).navigate(R.id.showStoreList);
             }
         });
     }

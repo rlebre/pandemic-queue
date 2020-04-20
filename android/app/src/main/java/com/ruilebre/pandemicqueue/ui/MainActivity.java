@@ -1,10 +1,6 @@
 package com.ruilebre.pandemicqueue.ui;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Menu;
-import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,5 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Pandemic Queue");
+        toolbar.setNavigationOnClickListener(view -> onBackPressed());
     }
 }

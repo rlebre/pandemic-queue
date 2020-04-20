@@ -86,7 +86,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_store, container, false);
+        View view = inflater.inflate(R.layout.fragment_store_details, container, false);
 
         if (getArguments() != null) {
             store = (Store) getArguments().getSerializable(STORE_PARAM);
@@ -126,6 +126,9 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                     Toast.makeText(getContext(), getString(R.string.ticket_reserved), Toast.LENGTH_LONG).show();
                     storeGetTicketButton.setVisibility(View.GONE);
                     storeCancelTicketButton.setVisibility(View.VISIBLE);
+                } else {
+                    //TODO: Check how can discard session
+                    getActivity().recreate();
                 }
             }
         });
@@ -137,6 +140,9 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                 if (statusCheckTicket.getTicketExists()) {
                     storeGetTicketButton.setVisibility(View.GONE);
                     storeCancelTicketButton.setVisibility(View.VISIBLE);
+                } else {
+                    //TODO: Check how can discard session
+                    getActivity().recreate();
                 }
             }
         });
@@ -149,6 +155,9 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                     Toast.makeText(getContext(), getString(R.string.ticket_canceled), Toast.LENGTH_LONG).show();
                     storeGetTicketButton.setVisibility(View.VISIBLE);
                     storeCancelTicketButton.setVisibility(View.GONE);
+                } else {
+                    //TODO: Check how can discard session
+                    getActivity().recreate();
                 }
             }
         });
