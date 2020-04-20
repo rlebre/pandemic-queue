@@ -25,6 +25,8 @@ public class StoreListFragment extends Fragment {
     private StoreService storeService;
     private StoreListViewModel storeListViewModel;
 
+    private StoreListRecyclerViewAdapter adapter;
+
     public StoreListFragment() {
         // Required empty public constructor
     }
@@ -59,7 +61,9 @@ public class StoreListFragment extends Fragment {
 
             if (storeListResult != null) {
                 loadingProgressBar.setVisibility(View.GONE);
-                recyclerView.setAdapter(new StoreListRecyclerViewAdapter(storeListResult));
+
+                adapter = new StoreListRecyclerViewAdapter(storeListResult);
+                recyclerView.setAdapter(adapter);
             } else {
 
             }
@@ -88,14 +92,18 @@ public class StoreListFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // filter recycler view when query submitted
-                //mAdapter.getFilter().filter(query);
+                if (adapter != null) {
+                    adapter.getFilter().filter(query);
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String query) {
                 // filter recycler view when text is changed
-                //mAdapter.getFilter().filter(query);
+                if (adapter != null) {
+                    adapter.getFilter().filter(query);
+                }
                 return false;
             }
         });
