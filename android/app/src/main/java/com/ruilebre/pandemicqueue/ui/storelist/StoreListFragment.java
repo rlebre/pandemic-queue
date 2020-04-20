@@ -52,7 +52,7 @@ public class StoreListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading_store_list);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         RecyclerView recyclerView = view.findViewById(R.id.store_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -82,19 +82,13 @@ public class StoreListFragment extends Fragment {
         menu.clear();
         inflater.inflate(R.menu.menu_main, menu);
 
-        // Associate searchable configuration with the SearchView
-        // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         SearchView searchView;
         searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
 
-        // listening to search query text change
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
                 if (adapter != null) {
                     adapter.getFilter().filter(query);
                 }
@@ -103,7 +97,6 @@ public class StoreListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
                 if (adapter != null) {
                     adapter.getFilter().filter(query);
                 }
