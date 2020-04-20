@@ -31,9 +31,11 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private UserService userService;
+    private boolean isEmail;
 
     LoginViewModel(UserService userService) {
         this.userService = userService;
+        this.isEmail = true;
     }
 
     LiveData<LoginFormState> getLoginFormState() {
@@ -57,9 +59,13 @@ public class LoginViewModel extends ViewModel {
 
     }
 
-    public void login(String email, String password) {
+    public void login(String identifier, String password) {
         HashMap<String, String> loginuser = new HashMap<>();
-        loginuser.put("email", email);
+        if (isEmail) {
+            loginuser.put("email", identifier);
+        } else {
+            loginuser.put("username", identifier);
+        }
         loginuser.put("password", password);
         Call call = userService.login(loginuser);
         call.enqueue(new Callback() {
@@ -109,9 +115,12 @@ public class LoginViewModel extends ViewModel {
         if (username == null) {
             return false;
         }
+
         if (username.contains("@")) {
+            this.isEmail = true;
             return Patterns.EMAIL_ADDRESS.matcher(username).matches();
         } else {
+            this.isEmail = false;
             return !username.trim().isEmpty();
         }
     }
