@@ -21,4 +21,6 @@
     <string name="cancel_ticket">Cancel Ticket</string>
     <string name="ticket_canceled">Ticket canceled.</string>
     <string name="ticket_reserved">Ticket reserved.</string>
+    <string name="search_hint">Type…</string>
+    <string name="action_search">Search</string>
 </resources>
