@@ -10,19 +10,21 @@
         android:label="LoginFragment">
         <action
             android:id="@+id/showStoreList"
-            app:destination="@id/loginFragmentToStoreListFragment" />
+            app:destination="@id/fragment_store_list"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragmentToStoreListFragment"
+        android:id="@+id/fragment_store_list"
         android:name="com.ruilebre.pandemicqueue.ui.storelist.StoreListFragment"
         android:label="StoreListFragment">
         <action
             android:id="@+id/showStoreDetails"
-            app:destination="@id/storeListFragmentToStoreFragment" />
+            app:destination="@id/fragment_store_details" />
     </fragment>
 
     <fragment
-        android:id="@+id/storeListFragmentToStoreFragment"
+        android:id="@+id/fragment_store_details"
         android:name="com.ruilebre.pandemicqueue.ui.store.StoreFragment"
         android:label="StoreFragment"></fragment>
 </navigation>
