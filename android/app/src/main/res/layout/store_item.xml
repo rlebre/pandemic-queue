@@ -22,9 +22,9 @@
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/store_logo"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/store_name"
