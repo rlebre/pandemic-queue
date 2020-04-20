@@ -58,7 +58,7 @@ class FakeDb {
         storesMeusuper.forEach(store => {
             var name = "Meu Super " + store.name;
             var city = store.name;
-            var address = store.latitude + ", " + store.longitude;
+            var address = store.morada;
             var capacity = Math.floor(parseInt(store.id) / 10);
             var parentStore = "meusuper";
 
