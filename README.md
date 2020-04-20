@@ -196,6 +196,7 @@ Protected:
 - [x] Filter store list
 - [ ] Map view of the stores in Portugal
 - [ ] Filter stores by location and radius
+- [ ] Hide keyboard when touching outside
 
 ## Administration application
 
