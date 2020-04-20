@@ -71,7 +71,7 @@ class FakeDb {
     pushLidlStores() {
         var count = 0;
         storesLidl.forEach(store => {
-            var name = "Lidl" + store.Locality;
+            var name = "Lidl " + store.Locality;
             var city = store.Locality;
             var address = store.AddressLine + ", " + store.PostalCode;
             var capacity = parseInt(store.EntityID);
