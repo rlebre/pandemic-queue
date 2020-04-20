@@ -193,7 +193,7 @@ Protected:
 - [x] Store details map
 - [x] Create a ticket
 - [x] Cancel a ticket
-- [ ] Filter store list
+- [x] Filter store list
 - [ ] Map view of the stores in Portugal
 - [ ] Filter stores by location and radius
 
