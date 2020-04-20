@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -82,6 +83,8 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             store = (Store) getArguments().getSerializable(STORE_PARAM);
         }
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -128,7 +131,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                     storeCancelTicketButton.setVisibility(View.VISIBLE);
                 } else {
                     //TODO: Check how can discard session
-                    getActivity().recreate();
+                    //getActivity().recreate();
                 }
             }
         });
@@ -142,7 +145,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                     storeCancelTicketButton.setVisibility(View.VISIBLE);
                 } else {
                     //TODO: Check how can discard session
-                    getActivity().recreate();
+                    //getActivity().recreate();
                 }
             }
         });
@@ -157,7 +160,7 @@ public class StoreFragment extends Fragment implements OnMapReadyCallback {
                     storeCancelTicketButton.setVisibility(View.GONE);
                 } else {
                     //TODO: Check how can discard session
-                    getActivity().recreate();
+                    //getActivity().recreate();
                 }
             }
         });

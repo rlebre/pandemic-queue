@@ -11,6 +11,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +51,8 @@ public class StoreListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading_store_list);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         RecyclerView recyclerView = view.findViewById(R.id.store_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
