@@ -141,6 +141,9 @@ class FakeDb {
 
         console.log('\nPushing users to database...');
         this.pushUsersToDb();
+
+
+        console.log('\nDatabase initialized successffuly.');
     }
 
     async cleanDb() {
