@@ -27,7 +27,7 @@
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAYEHnK6GKTon6Ha65T_akUz3i8O8vHWKI" />
+            android:value="--hidden--" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
